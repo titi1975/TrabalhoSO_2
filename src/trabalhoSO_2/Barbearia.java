@@ -1,8 +1,16 @@
 package trabalhoSO_2;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+
+
+
 //todas as alterações às filas de clientes seram feitas pela barbearia
 public class Barbearia{
-	Cliente[] cadeiras = new Cliente[20];
+	LinkedList<Cliente> proxCliente = new LinkedList<Cliente>();
+	LinkedList<Cliente> cadeiras = new LinkedList<Cliente>();	
+	int ocupacao = 0;
 	Barbeiro RecrutaZero;
 	Barbeiro Dentinho;
 	Barbeiro Otto;
@@ -15,8 +23,38 @@ public class Barbearia{
 		Tainha = new Sargento(tempoSono);
 	}
 	
+	//Função de ler os clietes
+	
 	//1 Barbeiro;
 	public void casoA() {
+		int semClientes = 0;
+		while(semClientes < 3) {
+			//Se o Sargento estiver acordado
+			if (!Tainha.isAlive()) {
+				if (ocupacao < 20 && proxCliente.getFirst().tipo != 0) {
+					//Se há cadeiras livres, adiciona apenas um cliente
+					cadeiras.add(proxCliente.getFirst());
+					cadeiras.get(ocupacao).run(); //contar o tempo de espera
+					ocupacao++;
+					proxCliente.remove();
+				}
+				else if (ocupacao < 20) {
+					semClientes++;
+				}
+				Tainha.run(); //Tira um cochilo
+			}
+			
+			//Se o Recruta estiver livre
+			if(!RecrutaZero.isAlive()) {
+				Collections.sort(cadeiras, new SortByTipo());
+				if (ocupacao != 0 && cadeiras.getFirst().tipo != 0) {
+					// tira o primeiro da fila para cortar o cabelo
+					cadeiras.remove();
+					RecrutaZero.run(); 
+				}
+			}
+			
+		}
 		
 	}
 	
@@ -60,7 +98,7 @@ class Barbeiro extends Thread {
 }
 
 class Sargento extends Thread {
-	double tempoSono;
+	double tempoSono; //em segundos
 	Sargento(double tempoSono) {
 		this.tempoSono = tempoSono;
 	}
@@ -81,7 +119,6 @@ class Cliente extends Thread {
 	
 	public Cliente(int tipo) {
 		this.tipo = tipo;
-		run(); //começa a contar a espera desde que é criado;
 	}
 	
 	public void run() {
@@ -93,6 +130,17 @@ class Cliente extends Thread {
 	}
 	
 }
+
+class SortByTipo implements Comparator<Cliente> {
+
+
+	public int compare(Cliente c1, Cliente c2) {
+		// TODO Auto-generated method stub
+		return Integer.compare(c1.tipo, c2.tipo);
+	}
+}
+
+
 
 
 
