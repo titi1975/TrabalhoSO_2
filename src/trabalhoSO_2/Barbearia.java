@@ -16,6 +16,10 @@ public class Barbearia{
 	Barbeiro Otto;
 	Sargento Tainha;
 	
+	
+	
+	
+	
 	public Barbearia(int tempoSono) {
 		RecrutaZero = new Barbeiro();
 		Dentinho = new Barbeiro();
@@ -49,8 +53,10 @@ public class Barbearia{
 				Collections.sort(cadeiras, new SortByTipo());
 				if (ocupacao != 0 && cadeiras.getFirst().tipo != 0) {
 					// tira o primeiro da fila para cortar o cabelo
+					RecrutaZero.run(cadeiras.getFirst().tipo); 
+					
 					cadeiras.remove();
-					RecrutaZero.run(); 
+					
 				}
 			}
 			
@@ -72,9 +78,6 @@ public class Barbearia{
 
 	 }
 }
-
-	
-
 
 class SortByTipo implements Comparator<Cliente> {
 

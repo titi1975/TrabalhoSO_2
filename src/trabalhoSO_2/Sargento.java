@@ -6,7 +6,9 @@ public class Sargento extends Thread {
 		this.tempoSono = tempoSono;
 	}
 	
-	//dormir
+	/**
+	 * dormir
+	 */
 	public void run() {
 		try {
 			wait((long)(tempoSono*(1000)));
